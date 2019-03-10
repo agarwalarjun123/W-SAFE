@@ -1,17 +1,15 @@
 
 const router = require('express').Router();
-const bcrypt = require('bcrypt');
 const user = require('../model/user')
-const {sign} = require('jwt')
+const {sign} = require('jsonwebtoken')
 
 router.post('/signup',(req,res,next)=>{
-    const hash = bcrpyt.hashSync(req.password,process.env.salt);
     user.findOne({name:req.body.name})
     .then(e=>{
         if(!e)
             new user({
-                name : req.name,
-                password: hash,
+                name : req.body.name,
+                password:req.body.password,
                 contacts:req.body.contacts 
             }).save()
             .then(e=>{
@@ -27,12 +25,11 @@ router.post('/signup',(req,res,next)=>{
     
 })
 router.post('/login',(req,res,next)=>{
-    user.findOne({name:req.body.name})
+    user.findOne({name:req.body.name,password:req.body.password})
     .then((e)=>{
         if(e)
-            if(bcrypt.compareSync(req.password,e.password))
-                
-                sign(req.body.password,process.env.secret,(err,token)=>{
+                            
+                sign({name:req.body.name,id:e.id},process.env.secret,(err,token)=>{
                     if(err)
                         next(new Error(err))
                     res.send({token})
