@@ -20,7 +20,7 @@ services:
     container_name: mongo-wsafe
     image: mongo
     volumes:
-    - ./data:/data/dbs
+    - ./data:/data/db
     ports:
       - 27017:27017
   
