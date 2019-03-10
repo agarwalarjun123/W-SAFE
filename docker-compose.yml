@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  node: 
+    container_name: node-wsafe
+    build: ./Server
+    image: wsafe-node
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+    environment: 
+      - MONGO_URL=mongodb://mongo:27017/wsafe
+    depends_on:
+      - mongo
+      
+    
+  
+  mongo:
+    container_name: mongo-wsafe
+    image: mongo
+    volumes:
+    - ./data:/data/dbs
+    ports:
+      - 27017:27017
+  
