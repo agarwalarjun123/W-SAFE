@@ -29,5 +29,5 @@ app.use((err,req,res,next)=>{
     res.send({err:err.message});
 });
 const server=app.listen(process.env.PORT || 3000,"0.0.0.0", ()=>console.log("Listening..."));
-socket(server);
-        
+socket(server)
+

@@ -6,31 +6,32 @@ const valid = require('../model/socketconnections')
 require('dotenv').config({
     path: "../../.env"
 })
-modules.export = (server)=>{
+module.exports = (server)=>{
     const io = socket(server)
-    io.on('connection', (socket) => {
-        console.log(socket.id)
-            if(socket.handshake.token)
-                verify(socket.handshake.token, process.env.secret, (err, user) => {
-    
+
+    io.on('connection', (sc) => {
+
+            if(sc.handshake.token)
+                verify(sc.handshake.token, process.env.secret, (err, user) => {
+                    if(!err)
                     new valid({
                             userId: user.id,
-                            socketId: socket.id
+                            socketId: sc.id
                         }).save()
                         .then(e => {
-                            socket.on('data', (e) => {
+                            sc.on('data', (e) => {
                                     valid.find({})
                                         .then(users => {
                                             users.forEach(user => {
                                                 if (user.socketId != socket.id)
-                                                    socket.to(user.sockerId).emit('data', e);
+                                                    sc.to(user.sockerId).emit('data', e);
                                             })
                                         })
-                                        .catch(err => socket.emit(err))
+                                        .catch(err => sc.emit(err))
     
                                 })
                                 .catch(err => {
-                                    socket.emit('error', {
+                                    sc.emit('error', {
                                         msg: "invalid token"
                                     })
                                 })
