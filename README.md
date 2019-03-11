@@ -36,7 +36,7 @@ According to the report and data:
 6. The application will have a safe mode, which will turn off all alarms and tracking systems.
 
 
-### Target Audience ### </br>
+### Target Audience  </br>
 School going children</br>
 Females</br>
 Teenagers
